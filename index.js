@@ -3,6 +3,12 @@ const genres = require("./routes/genres");
 const express = require("express");
 const error = require("./middleware/error");
 const app = express();
+const mongoose = require("mongoose");
+
+mongoose
+  .connect("mongodb://localhost/vidly")
+  .then(() => console.log("connecting to mongoDB"))
+  .catch(() => console.log("Not connecting to mongoDB"));
 
 app.set("view engine", "ejs");
 app.get("/", (req, res) => {
