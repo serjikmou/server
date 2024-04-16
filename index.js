@@ -1,15 +1,15 @@
-require("dotenv").config();
 const Joi = require("joi");
 const genres = require("./routes/genres");
 const express = require("express");
 const error = require("./middleware/error");
 const app = express();
 const mongoose = require("mongoose");
+const config = require("config");
 mongoose.set("strictQuery", false);
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URL, {
+    const conn = await mongoose.connect(config.get("db"), {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
