@@ -8,7 +8,7 @@ const app = express();
 const mongoose = require("mongoose");
 const config = require("config");
 mongoose.set("strictQuery", false);
-
+console.log("first");
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(config.get("db"), {
