@@ -1,5 +1,7 @@
 const Joi = require("joi");
 const genres = require("./routes/genres");
+const users = require("./routes/users");
+const auth = require("./routes/auth");
 const express = require("express");
 const error = require("./middleware/error");
 const app = express();
@@ -27,7 +29,10 @@ app.get("/", (req, res) => {
 
 app.use(express.json());
 app.use(error);
+
 app.use("/api/genres", genres);
+app.use("/api/users", users);
+app.use("/api/auth", auth);
 
 connectDB().then(() => {
   app.listen(port, () => console.log(`Listening on port ${port}...`));

@@ -1,24 +1,16 @@
 const express = require("express");
-const mongoose = require("mongoose");
-const router = express.Router();
-const Joi = require("joi");
-mongoose.set("useFindAndModify", false);
-const Genre = new mongoose.model("Genre", {
-  name: {
-    type: String,
-    required: true,
-    minLength: 3,
-    maxLength: 5,
-  },
-});
+const { validate, Genre } = require("../models/genre");
+const authToken = require("../middleware/auth");
 
-router.get("/", async (req, res) => {
+const router = express.Router();
+
+router.get("/", authToken, async (req, res) => {
   const result = await Genre.find();
   res.send(result);
 });
 
 router.post("/", async (req, res) => {
-  const { error } = validateGenre(req.body);
+  const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   try {
     const genre = await new Genre({
@@ -32,7 +24,7 @@ router.post("/", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
-  const { error } = validateGenre(req.body);
+  const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   const result = await Genre.findOneAndUpdate(
@@ -55,13 +47,5 @@ router.delete("/:id", async (req, res) => {
 
   res.send(result);
 });
-
-function validateGenre(genre) {
-  const schema = {
-    name: Joi.string().min(3).required(),
-  };
-
-  return Joi.validate(genre, schema);
-}
 
 module.exports = router;
